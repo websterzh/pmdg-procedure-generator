@@ -57,6 +57,7 @@ export default {
         sid: [],
         star: [],
         approach: [],
+        transition: [],
       },
       currentMode: "SID",
     };

@@ -11,8 +11,15 @@
           <GeneralConfigurator :data="data.general" />
           <SidStarEditor :data="data.star" />
         </b-tab>
-        <b-tab title="APPROACH" @click="data.general.mode = 'APPROACH'">
-          <b-card-text>To be implemented...</b-card-text>
+
+        <b-tab title="APPROACH" @click="data.general.mode = 'APPROACH'" class="text-center">
+          <GeneralConfigurator :data="data.general" />
+          <SidStarEditor :data="data.approach" />
+        </b-tab>
+
+        <b-tab title="TRANSITION" @click="data.general.mode = 'TRANSITION'" class="text-center">
+          <GeneralConfigurator :data="data.general" />
+          <SidStarEditor :data="data.transition" />
         </b-tab>
       </b-tabs>
     </b-card>

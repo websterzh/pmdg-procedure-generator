@@ -1,4 +1,98 @@
-function _getSid(data) {
+function _parseTurnDirection(turnDirection) {
+    const tokens = [];
+    switch (turnDirection) {
+        case 'L':
+            tokens.push(`TURN LEFT DIRECT`);
+            break;
+        case 'R':
+            tokens.push(`TURN RIGHT DIRECT`);
+            break;
+        default:
+            break;
+    }
+    return tokens;
+}
+
+function _parseSpeed(speed) {
+    const tokens = [];
+    if (speed) {
+        tokens.push(`SPEED ${speed}`);
+    }
+    return tokens;
+}
+
+function _parseAltitude(altitude) {
+    const tokens = [];
+    if (altitude) {
+        const matchAbove = /(\d+)A/;
+        const matchBelow = /(\d+)B/;
+        const matchAt = /(\d+)/;
+        const above = altitude.match(matchAbove);
+        const below = altitude.match(matchBelow);
+        const at = altitude.match(matchAt);
+        if (above) {
+            tokens.push(`AT OR ABOVE ${above[1]}`);
+        }
+        if (below) {
+            tokens.push(`AT OR BELOW ${below[1]}`);
+        }
+        if (!above && !below && at) {
+            tokens.push(`${at[1]}`);
+        }
+    }
+    return tokens;
+}
+
+function _parseFix(fix, flyover = false) {
+    const tokens = [];
+    if (fix) {
+        if (flyover) {
+            tokens.push(`FIX OVERFLY ${fix}`);
+        } else {
+            tokens.push(`FIX ${fix}`);
+        }
+    }
+    return tokens;
+}
+
+function _parseHdgTrk(hdgtrk) {
+    const tokens = [];
+    if (hdgtrk) {
+        const matchHdg = /H(\d+)/;
+        const matchTrk = /T(\d+)/;
+        const matchNumber = /(\d+)/;
+        const hdg = hdgtrk.match(matchHdg);
+        const trk = hdgtrk.match(matchTrk);
+        const num = hdgtrk.match(matchNumber);
+        if (trk) {
+            tokens.push(`TRK ${trk[1]}`);
+        } else if (hdg) {
+            tokens.push(`HDG ${hdg[1]}`);
+        } else if (num) {
+            tokens.push(`TRK ${num[1]}`);
+        }
+        if (hdg || trk || num) {
+            tokens.push(`UNTIL`);
+        }
+    }
+    return tokens;
+}
+
+function _parseWaypoint(waypoint) {
+    const tokens = [];
+    tokens.push(..._parseTurnDirection(waypoint.turnDirection));
+    if (waypoint.fix) {
+        tokens.push(..._parseFix(waypoint.fix, waypoint.flyover));
+    } else if (waypoint.hdgtrk) {
+        tokens.push(..._parseHdgTrk(waypoint.hdgtrk));
+    }
+    tokens.push(..._parseAltitude(waypoint.altitude));
+    tokens.push(..._parseSpeed(waypoint.speed));
+
+    return tokens;
+}
+
+function getSid(data) {
     let tokens = [];
     if (data.general.airport && data.general.procedure && data.general.runway) {
         tokens.push(`SID`);
@@ -7,62 +101,13 @@ function _getSid(data) {
     }
     for (let i = 0; i < data.sid.length; i++) {
         const waypoint = data.sid[i];
-        switch (waypoint.turnDirection) {
-            case 'L':
-                tokens.push(`TURN LEFT DIRECT`);
-                break;
-            case 'R':
-                tokens.push(`TURN RIGHT DIRECT`);
-                break;
-            default:
-                break;
-        }
-        if (waypoint.fix) {
-            if (waypoint.flyover) {
-                tokens.push(`FIX OVERFLY ${waypoint.fix}`);
-            } else {
-                tokens.push(`FIX ${waypoint.fix}`);
-            }
-        } else if (waypoint.hdgtrk) {
-            const matchHdg = /H(\d+)/;
-            const matchTrk = /T(\d+)/;
-            const hdg = waypoint.hdgtrk.match(matchHdg);
-            const trk = waypoint.hdgtrk.match(matchTrk);
-            if (hdg) {
-                tokens.push(`HDG ${hdg[1]}`);
-            } else if (trk) {
-                tokens.push(`TRK ${trk[1]}`);
-            }
-            if (hdg || trk) {
-                tokens.push(`UNTIL`)
-            }
-        }
-        if (waypoint.altitude) {
-            const matchAbove = /(\d+)A/;
-            const matchBelow = /(\d+)B/;
-            const matchAt = /(\d+)/;
-            const above = waypoint.altitude.match(matchAbove);
-            const below = waypoint.altitude.match(matchBelow);
-            const at = waypoint.altitude.match(matchAt);
-            if (above) {
-                tokens.push(`AT OR ABOVE ${above[1]}`);
-            }
-            if (below) {
-                tokens.push(`AT OR BELOW ${below[1]}`);
-            }
-            if (!above && !below && at) {
-                tokens.push(`${at[1]}`);
-            }
-        }
-        if (waypoint.speed) {
-            tokens.push(`SPEED ${waypoint.speed}`);
-        }
+        tokens.push(..._parseWaypoint(waypoint));
     }
 
     return tokens;
 }
 
-function _getStar(data) { // eslint-disable-line
+function getStar(data) { // eslint-disable-line
     let tokens = [];
     if (data.general.airport && data.general.procedure && data.general.runway) {
         tokens.push(`STAR`);
@@ -70,56 +115,7 @@ function _getStar(data) { // eslint-disable-line
     }
     for (let i = 0; i < data.star.length; i++) {
         const waypoint = data.star[i];
-        switch (waypoint.turnDirection) {
-            case 'L':
-                tokens.push(`TURN LEFT DIRECT`);
-                break;
-            case 'R':
-                tokens.push(`TURN RIGHT DIRECT`);
-                break;
-            default:
-                break;
-        }
-        if (waypoint.fix) {
-            if (waypoint.flyover) {
-                tokens.push(`FIX OVERFLY ${waypoint.fix}`);
-            } else {
-                tokens.push(`FIX ${waypoint.fix}`);
-            }
-        } else if (waypoint.hdgtrk) {
-            const matchHdg = /H(\d+)/;
-            const matchTrk = /T(\d+)/;
-            const hdg = waypoint.hdgtrk.match(matchHdg);
-            const trk = waypoint.hdgtrk.match(matchTrk);
-            if (hdg) {
-                tokens.push(`HDG ${hdg[1]}`);
-            } else if (trk) {
-                tokens.push(`TRK ${trk[1]}`);
-            }
-            if (hdg || trk) {
-                tokens.push(`UNTIL`)
-            }
-        }
-        if (waypoint.altitude) {
-            const matchAbove = /(\d+)A/;
-            const matchBelow = /(\d+)B/;
-            const matchAt = /(\d+)/;
-            const above = waypoint.altitude.match(matchAbove);
-            const below = waypoint.altitude.match(matchBelow);
-            const at = waypoint.altitude.match(matchAt);
-            if (above) {
-                tokens.push(`AT OR ABOVE ${above[1]}`);
-            }
-            if (below) {
-                tokens.push(`AT OR BELOW ${below[1]}`);
-            }
-            if (!above && !below && at) {
-                tokens.push(`${at[1]}`);
-            }
-        }
-        if (waypoint.speed) {
-            tokens.push(`SPEED ${waypoint.speed}`);
-        }
+        tokens.push(..._parseWaypoint(waypoint));
     }
 
     if (data.general.airport && data.general.procedure && data.general.runway) {
@@ -130,7 +126,7 @@ function _getStar(data) { // eslint-disable-line
     return tokens;
 }
 
-function _getApproach(data) { // eslint-disable-line
+function getApproach(data) { // eslint-disable-line
     let tokens = [];
     if (data.general.airport && data.general.procedure && data.general.runway) {
         tokens.push(`APPROACH`);
@@ -138,64 +134,16 @@ function _getApproach(data) { // eslint-disable-line
     }
     for (let i = 0; i < data.approach.length; i++) {
         const waypoint = data.approach[i];
-        switch (waypoint.turnDirection) {
-            case 'L':
-                tokens.push(`TURN LEFT DIRECT`);
-                break;
-            case 'R':
-                tokens.push(`TURN RIGHT DIRECT`);
-                break;
-            default:
-                break;
-        }
-        if (waypoint.fix) {
-            if (waypoint.flyover) {
-                tokens.push(`FIX OVERFLY ${waypoint.fix}`);
-            } else {
-                tokens.push(`FIX ${waypoint.fix}`);
-            }
-        } else if (waypoint.hdgtrk) {
-            const matchHdg = /H(\d+)/;
-            const matchTrk = /T(\d+)/;
-            const hdg = waypoint.hdgtrk.match(matchHdg);
-            const trk = waypoint.hdgtrk.match(matchTrk);
-            if (hdg) {
-                tokens.push(`HDG ${hdg[1]}`);
-            } else if (trk) {
-                tokens.push(`TRK ${trk[1]}`);
-            }
-            if (hdg || trk) {
-                tokens.push(`UNTIL`)
-            }
-        } else {
+        if (!waypoint.fix && !waypoint.hdgtrk) {
             tokens.push(`RNW ${data.general.runway}`);
         }
-        if (waypoint.altitude) {
-            const matchAbove = /(\d+)A/;
-            const matchBelow = /(\d+)B/;
-            const matchAt = /(\d+)/;
-            const above = waypoint.altitude.match(matchAbove);
-            const below = waypoint.altitude.match(matchBelow);
-            const at = waypoint.altitude.match(matchAt);
-            if (above) {
-                tokens.push(`AT OR ABOVE ${above[1]}`);
-            }
-            if (below) {
-                tokens.push(`AT OR BELOW ${below[1]}`);
-            }
-            if (!above && !below && at) {
-                tokens.push(`${at[1]}`);
-            }
-        }
-        if (waypoint.speed) {
-            tokens.push(`SPEED ${waypoint.speed}`);
-        }
+        tokens.push(..._parseWaypoint(waypoint));
     }
 
     return tokens;
 }
 
-function _getTransition(data) { // eslint-disable-line
+function getTransition(data) { // eslint-disable-line
     let tokens = [];
     if (data.general.procedure) {
         tokens.push("");
@@ -204,56 +152,7 @@ function _getTransition(data) { // eslint-disable-line
     }
     for (let i = 0; i < data.transition.length; i++) {
         const waypoint = data.transition[i];
-        switch (waypoint.turnDirection) {
-            case 'L':
-                tokens.push(`TURN LEFT DIRECT`);
-                break;
-            case 'R':
-                tokens.push(`TURN RIGHT DIRECT`);
-                break;
-            default:
-                break;
-        }
-        if (waypoint.fix) {
-            if (waypoint.flyover) {
-                tokens.push(`FIX OVERFLY ${waypoint.fix}`);
-            } else {
-                tokens.push(`FIX ${waypoint.fix}`);
-            }
-        } else if (waypoint.hdgtrk) {
-            const matchHdg = /H(\d+)/;
-            const matchTrk = /T(\d+)/;
-            const hdg = waypoint.hdgtrk.match(matchHdg);
-            const trk = waypoint.hdgtrk.match(matchTrk);
-            if (hdg) {
-                tokens.push(`HDG ${hdg[1]}`);
-            } else if (trk) {
-                tokens.push(`TRK ${trk[1]}`);
-            }
-            if (hdg || trk) {
-                tokens.push(`UNTIL`)
-            }
-        }
-        if (waypoint.altitude) {
-            const matchAbove = /(\d+)A/;
-            const matchBelow = /(\d+)B/;
-            const matchAt = /(\d+)/;
-            const above = waypoint.altitude.match(matchAbove);
-            const below = waypoint.altitude.match(matchBelow);
-            const at = waypoint.altitude.match(matchAt);
-            if (above) {
-                tokens.push(`AT OR ABOVE ${above[1]}`);
-            }
-            if (below) {
-                tokens.push(`AT OR BELOW ${below[1]}`);
-            }
-            if (!above && !below && at) {
-                tokens.push(`${at[1]}`);
-            }
-        }
-        if (waypoint.speed) {
-            tokens.push(`SPEED ${waypoint.speed}`);
-        }
+        tokens.push(..._parseWaypoint(waypoint));
     }
 
     return tokens;
@@ -262,13 +161,13 @@ function _getTransition(data) { // eslint-disable-line
 export function calculate(data) {
     switch (data.general.mode) {
         case "SID":
-            return _getSid(data);
+            return getSid(data);
         case "STAR":
-            return _getStar(data);
+            return getStar(data);
         case "APPROACH":
-            return _getApproach(data);
+            return getApproach(data);
         case "TRANSITION":
-            return _getTransition(data);
+            return getTransition(data);
         default:
             break;
     }

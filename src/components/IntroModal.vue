@@ -27,12 +27,13 @@
     </p>
     <h4>Limitations</h4>
     <p>
-      Currently, I have not started to code for STAR and APPROACH procedures.
-      But you can use it for SID procedures. Also, NO user input will be
-      validated in the current version. There may also be some logical bugs, as
-      I have only vaguely tested it. After all planned functionalities are
-      completed, the source code will be published on GitHub. If you found any
-      bug, let me know and see how we can fix it or improve it. &#128521;
+      Currently, NO user input will be validated in the current version. There
+      may also be some logical bugs, as I have only vaguely tested it. Also, I
+      did not spend very much time on this project, advanced features, like same
+      procedure for multiple runways, are not supported. After all planned
+      functionalities are completed, the source code will be published on
+      GitHub. If you found any bug, let me know and see how we can fix it or
+      improve it. &#128521;
     </p>
     <h4>How to Use?</h4>
     <p>

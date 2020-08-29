@@ -1,5 +1,5 @@
 <template>
-  <div class='editor'>
+  <div class="editor">
     <b>
       <b-row>
         <b-col></b-col>
@@ -133,13 +133,14 @@ export default {
       }
     },
     removeAllWaypoints() {
-      for (let i = this.data.length; i >= 0; i--) {
-        this.removeWaypoint(i);
+      if (window.confirm("Remove all waypoints?")) {
+        for (let i = this.data.length; i >= 0; i--) {
+          this.removeWaypoint(i);
+        }
       }
     },
   },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

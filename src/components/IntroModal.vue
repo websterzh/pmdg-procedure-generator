@@ -42,8 +42,12 @@
       with the help of <kbd>tab</kbd> and <kbd>space</kbd> key. Every line
       represents a waypoint in the procedure. Every time when a new line is
       added, the cursor will automatically be relocated to focus on the new
-      line. So, use <kbd>tab</kbd> to move the cursor, and use
-      <kbd>space</kbd> to press the buttons until finishing the whole procedure!
+      line. So,
+      <ul>
+        <li>use <kbd>tab</kbd> to move the cursor to the next input box</li>
+        <li>use <kbd>shift</kbd> + <kbd>tab</kbd> to move backward</li>
+        <li>use <kbd>space</kbd> to press the buttons</li>
+      </ul>
       In the future version, more keyboard shortcuts will be added to further
       simplify the usage.
     </p>

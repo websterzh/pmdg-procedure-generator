@@ -2,6 +2,9 @@
 
 Hi there! Thank you for coming here! Good to have somebody using this web application!
 
+## Preview
+![preview_1](https://user-images.githubusercontent.com/40462331/91641085-b8fd9380-ea54-11ea-842a-20a2b98a2e68.png)
+
 ## Motivation
 This application is aiming to provide the user with a faster way to create customised SID/STAR procedures for their PMDG aircrafts. I was inspired by one of my friends, who had spent some time on creating procedures in PMDG format for some airports/procedures that have not been published in the public version of AIP, and hence not been included in data provided by Navigraph. Manually writing them can sometimes end up spending too much time before an online pilot can start enjoying the flight. Also, any small typo in the file may ruin the mood, especially when spending more than half an hours of extra time to "debug" the code, then realized one single character is missing from the file! 😩 The usage of automation can (hopefully!) potentially save an online pilot.
 

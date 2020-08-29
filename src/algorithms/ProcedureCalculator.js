@@ -30,11 +30,11 @@ function _parseAltitude(altitude) {
         const above = altitude.match(matchAbove);
         const below = altitude.match(matchBelow);
         const at = altitude.match(matchAt);
-        if (above) {
-            tokens.push(`AT OR ABOVE ${above[1]}`);
-        }
         if (below) {
             tokens.push(`AT OR BELOW ${below[1]}`);
+        }
+        if (above) {
+            tokens.push(`AT OR ABOVE ${above[1]}`);
         }
         if (!above && !below && at) {
             tokens.push(`${at[1]}`);

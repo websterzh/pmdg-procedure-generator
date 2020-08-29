@@ -107,7 +107,7 @@ function getSid(data) {
     return tokens;
 }
 
-function getStar(data) { // eslint-disable-line
+function getStar(data) {
     let tokens = [];
     if (data.general.airport && data.general.procedure && data.general.runway) {
         tokens.push(`STAR`);
@@ -126,7 +126,7 @@ function getStar(data) { // eslint-disable-line
     return tokens;
 }
 
-function getApproach(data) { // eslint-disable-line
+function getApproach(data) {
     let tokens = [];
     if (data.general.airport && data.general.procedure && data.general.runway) {
         tokens.push(`APPROACH`);
@@ -143,7 +143,7 @@ function getApproach(data) { // eslint-disable-line
     return tokens;
 }
 
-function getTransition(data) { // eslint-disable-line
+function getTransition(data) {
     let tokens = [];
     if (data.general.procedure) {
         tokens.push("");

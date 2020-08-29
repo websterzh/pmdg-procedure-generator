@@ -38,6 +38,8 @@
           v-model="waypoint.fix"
           class="text-center"
           placeholder="GG508"
+          lazy-formatter
+          :formatter="(value) => value.toUpperCase()"
         />
       </b-col>
       <b-col>
@@ -52,6 +54,8 @@
           v-model="waypoint.hdgtrk"
           class="text-center"
           placeholder="H030/T030"
+          lazy-formatter
+          :formatter="(value) => value.toUpperCase()"
         />
       </b-col>
       <b-col>
@@ -59,6 +63,8 @@
           v-model="waypoint.turnDirection"
           class="text-center"
           placeholder="L/R"
+          lazy-formatter
+          :formatter="(value) => value.toUpperCase()"
         />
       </b-col>
       <b-col>
@@ -66,6 +72,8 @@
           v-model="waypoint.altitude"
           class="text-center"
           placeholder="3900A/3900B/3900"
+          lazy-formatter
+          :formatter="(value) => value.toUpperCase()"
         />
       </b-col>
       <b-col>
@@ -73,6 +81,8 @@
           v-model="waypoint.speed"
           class="text-center"
           placeholder="200"
+          lazy-formatter
+          :formatter="(value) => value.toUpperCase()"
         />
       </b-col>
     </b-row>

@@ -4,11 +4,12 @@
       <b-tabs card>
         <b-tab title="SID" @click="data.general.mode = 'SID'" class="text-center" active>
           <GeneralConfigurator :data="data.general" />
-          <SidEditor :data="data.sid" />
+          <SidStarEditor :data="data.sid" />
         </b-tab>
 
-        <b-tab title="STAR" @click="data.general.mode = 'STAR'">
-          <b-card-text>To be implemented...</b-card-text>
+        <b-tab title="STAR" @click="data.general.mode = 'STAR'" class="text-center">
+          <GeneralConfigurator :data="data.general" />
+          <SidStarEditor :data="data.star" />
         </b-tab>
         <b-tab title="APPROACH" @click="data.general.mode = 'APPROACH'">
           <b-card-text>To be implemented...</b-card-text>
@@ -20,13 +21,13 @@
 
 <script>
 import GeneralConfigurator from './GeneralConfigurator.vue'
-import SidEditor from './SidEditor.vue'
+import SidStarEditor from './SidStarEditor.vue'
 
 export default {
   name: "ModeSelector",
   components: {
     GeneralConfigurator,
-    SidEditor,
+    SidStarEditor,
   },
   props: [ "data" ],
 };
